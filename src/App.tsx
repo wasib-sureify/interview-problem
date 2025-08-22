@@ -1,16 +1,8 @@
-import { useState } from "react";
 import "./App.css";
 
 type Option = {
   name: string;
   price: number;
-};
-
-type Order = {
-  type: Option;
-  size: Option;
-  addons: Option[];
-  total: string;
 };
 
 const coffeeConfig: {
@@ -36,45 +28,9 @@ const coffeeConfig: {
 };
 
 export default function CoffeeMachine() {
-  const [selectedType, setSelectedType] = useState<Option | null>(null);
-  const [selectedSize, setSelectedSize] = useState<Option | null>(null);
-  const [selectedAddons, setSelectedAddons] = useState<Option[]>([]);
-  const [confirmedOrder, setConfirmedOrder] = useState<Order | null>(null);
-
-  const handleAddonChange = (addon: Option) => {
-    setSelectedAddons((prev) =>
-      prev.includes(addon) ? prev.filter((a) => a !== addon) : [...prev, addon]
-    );
-  };
-
-  const calculateTotal = (): string => {
-    let total = 0;
-    if (selectedType) total += selectedType.price;
-    if (selectedSize) total += selectedSize.price;
-    selectedAddons.forEach((addon) => (total += addon.price));
-    return total.toFixed(2);
-  };
-
-  const confirmOrder = () => {
-    // if (!selectedType || !selectedSize) {
-    //   alert("Please select coffee type and size!");
-    //   return;
-    // }
-    setConfirmedOrder({
-      type: selectedType!,
-      size: selectedSize!,
-      addons: selectedAddons,
-      total: calculateTotal(),
-    });
-  };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        confirmOrder();
-      }}
-    >
+    <form>
       <h1>☕ Coffee Vending Machine</h1>
       {/* Coffee Types */}
       <fieldset>
@@ -85,9 +41,6 @@ export default function CoffeeMachine() {
               type="radio"
               name="coffeeType"
               value={type.name}
-              onChange={() => setSelectedType(type)}
-              checked={selectedType?.name === type.name}
-              required
             />
             {` ${type.name} ($${type.price})`}
           </label>
@@ -103,9 +56,6 @@ export default function CoffeeMachine() {
               type="radio"
               name="coffeeSize"
               value={size.name}
-              onChange={() => setSelectedSize(size)}
-              checked={selectedSize?.name === size.name}
-              required
             />
             {` ${size.name} (+$${size.price})`}
           </label>
@@ -120,8 +70,6 @@ export default function CoffeeMachine() {
             <input
               type="checkbox"
               value={addon.name}
-              onChange={() => handleAddonChange(addon)}
-              checked={selectedAddons.includes(addon)}
             />
             {` ${addon.name} (+$${addon.price})`}
           </label>
@@ -129,26 +77,13 @@ export default function CoffeeMachine() {
       </fieldset>
 
       {/* Price */}
-      <h3>Total: ${calculateTotal()}</h3>
+      <h3>Total: $0</h3>
 
       {/* Confirm Button */}
-      <button type="submit">Confirm Order</button>
+      <button>Confirm Order</button>
 
       {/* Order Summary */}
-      {confirmedOrder && (
-        <div className="order-summary">
-          <h2>✅ Order Summary</h2>
-          <p>Coffee: {confirmedOrder.type.name}</p>
-          <p>Size: {confirmedOrder.size.name}</p>
-          <p>
-            Add-ons:{" "}
-            {confirmedOrder.addons.length > 0
-              ? confirmedOrder.addons.map((a) => a.name).join(", ")
-              : "None"}
-          </p>
-          <p className="summary-total">Total: ${confirmedOrder.total}</p>
-        </div>
-      )}
+      {/*  Display order summary here*/}
     </form>
   );
 }
