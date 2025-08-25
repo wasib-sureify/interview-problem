@@ -77,10 +77,10 @@ export default function CoffeeMachine() {
       </fieldset>
 
       {/* Price */}
-      <h3>Total: $0</h3>
+      <h3 data-testid="total">Total: $0</h3>
 
       {/* Confirm Button */}
-      <button>Confirm Order</button>
+      <button type="submit">Confirm Order</button>
 
       {/* Order Summary */}
       {/*  Display order summary here*/}
