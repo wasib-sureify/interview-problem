@@ -1,4 +1,5 @@
 import "./App.css";
+import {useState} from "react";
 
 type Option = {
   name: string;
@@ -28,6 +29,27 @@ const coffeeConfig: {
 };
 
 export default function CoffeeMachine() {
+    const [coffeeType, setCoffeeType] = useState<string>('');
+    const [coffeeSize, setCoffeeSize] = useState<string>('');
+    const [coffeeAddons, setCoffeeAddons] = useState<string[]>([]);
+
+    const handleCoffeeAddon = (name: string) => {
+        const coffeeFound = coffeeAddons.find(item=>item===name);
+        console.log(coffeeFound, name);
+        if (coffeeFound) {
+            setCoffeeAddons((prevState)=>prevState.filter(item=>item!==name));
+        } else {
+            const addons = coffeeAddons.map((item)=>item);
+            addons.push(name);
+            setCoffeeAddons(addons);
+        }
+    }
+
+    const isItemInArray = (item:string)=> coffeeAddons.some(coffee=>coffee===item);
+
+    const sumItems = ()=>{
+        const coffeePrice = coffeeConfig.types.find(coffee=>coffee.name===coffeeType)?.price || 0;
+    }
 
   return (
     <form>
@@ -38,6 +60,9 @@ export default function CoffeeMachine() {
         {coffeeConfig.types.map((type) => (
           <label key={type.name}>
             <input
+                onChange={(event)=>{
+                    setCoffeeType(event.target.value);
+                }}
               type="radio"
               name="coffeeType"
               value={type.name}
@@ -53,6 +78,9 @@ export default function CoffeeMachine() {
         {coffeeConfig.sizes.map((size) => (
           <label key={size.name}>
             <input
+                onChange={(event)=>{
+                    setCoffeeSize(event.target.value);
+                }}
               type="radio"
               name="coffeeSize"
               value={size.name}
@@ -67,9 +95,9 @@ export default function CoffeeMachine() {
         <legend>Add-ons</legend>
         {coffeeConfig.addons.map((addon) => (
           <label key={addon.name}>
-            <input
+            <input onChange={(event)=>handleCoffeeAddon(addon.name)}
               type="checkbox"
-              value={addon.name}
+              checked={isItemInArray(addon.name)}
             />
             {` ${addon.name} (+$${addon.price})`}
           </label>
