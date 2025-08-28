@@ -29,8 +29,14 @@ const coffeeConfig: {
 
 export default function CoffeeMachine() {
 
+  const formatTotal = (value: number = 0) => {
+      return `$${value.toFixed(2)}`
+  }
+
+  const confirmOrder=()=>{}
+
   return (
-    <form>
+    <form onSubmit={confirmOrder}>
       <h1>☕ Coffee Vending Machine</h1>
       {/* Coffee Types */}
       <fieldset>
@@ -77,7 +83,7 @@ export default function CoffeeMachine() {
       </fieldset>
 
       {/* Price */}
-      <h3 data-testid="total">Total: $0</h3>
+      <h3 data-testid="total">Total: {formatTotal()}</h3>
 
       {/* Confirm Button */}
       <button type="submit">Confirm Order</button>
